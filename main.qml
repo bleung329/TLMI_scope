@@ -17,6 +17,7 @@ ApplicationWindow {
     TabBar {   
         id: tabBar
         width: parent.width/2
+
         //Device Tabs
         TabButton {
             text: qsTr("Setup")
@@ -36,25 +37,12 @@ ApplicationWindow {
                 radius: 5   
             }
         }
-        // Repeater {
-        //     id:repeater
-        //     model: ["Device 1","Device 2","Device 3","Device 4"];
-        //     TabButton {
-        //         text: modelData
-        //         background: Rectangle
-        //         {
-        //             color: {(tabBar.currentIndex == index)? "grey" : "green"}
-        //             opacity: 0.3
-        //             radius: 5   
-        //         }
-        //     }
-        // }
     }
     
     StackLayout {
         currentIndex: tabBar.currentIndex
         y: tabBar.y + tabBar.height + 10;
         SetupPanel{deviceIdx:1}
-        SetupPanel{deviceIdx:2}
+        MainPanel{}
     }
 }
