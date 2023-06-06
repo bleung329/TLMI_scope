@@ -101,22 +101,22 @@ Item {
                     }
                     TextField {
                         id: belowTempStartVal
-                        validator: DoubleValidator {}
+                        validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     TextField {
                         id: awdaw
-                        validator: DoubleValidator {}
+                        validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     TextField {
                         id: awd
-                        validator: DoubleValidator {}
+                        validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     TextField { 
                         id: timeTilStartStartVal
-                        validator: DoubleValidator {}
+                        validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     RoundButton{

@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 750 
     height: 400
-    title: "TLMI Scope Controller"
+    title: "TLMI Corp Scope Controller"
     flags: Qt.Window
     
     //Tab bar object to change between devices
@@ -52,9 +52,21 @@ ApplicationWindow {
                     text: qsTr("Setup")
                     background: Rectangle
                     {
+                        id:tabbyo
                         color: {"green"}
                         opacity: 0.3
                         radius: 5   
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                parent.color = "red"
+                            }
+                            onExited:
+                            {
+                                parent.color = "green"
+                            }
+                        }
                     }
                 }
                 TabButton {
@@ -70,11 +82,11 @@ ApplicationWindow {
                             anchors.fill: parent
                             hoverEnabled: true
                             onEntered: {
-                                tabby.color = "red"
+                                parent.color = "red"
                             }
                             onExited:
                             {
-                                tabby.color = "green"
+                                parent.color = "green"
                             }
                         }
                     }
