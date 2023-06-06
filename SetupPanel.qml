@@ -8,8 +8,7 @@ Item {
     RowLayout{
         spacing: 20
         anchors.fill: parent
-        // Layout.preferredWidth: parent.width/2
-        // height: root.passed_height
+
         ColumnLayout{
             id: connSetupColumn
             spacing:10
@@ -35,6 +34,7 @@ Item {
                     }
                     RoundButton
                     {
+                        id:connectSerial
                         Layout.alignment: Qt.AlignCenter
                         Layout.fillWidth:true
                         Layout.preferredHeight:30
@@ -51,6 +51,7 @@ Item {
                 title:"Home Stage"
                 RoundButton
                 {
+                    id:homeStage
                     height:parent.height
                     width:parent.width
                     text: qsTr("Home")
@@ -79,7 +80,6 @@ Item {
                         text: "1 (L)"
                     }
                     Text{
-                        id: timeTilStartStartEn
                         text: "2 (D)"
                     }
                     Text{
@@ -91,6 +91,7 @@ Item {
                         text: "4 (R)"
                     }
                     RoundButton{
+                        id:getJogs
                         Layout.fillWidth: true
                         text:"Get"
                         radius:4
@@ -100,26 +101,27 @@ Item {
                         text: "mm"
                     }
                     TextField {
-                        id: belowTempStartVal
+                        id: jogLeftVal
                         validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     TextField {
-                        id: awdaw
+                        id: jogDownVal
                         validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     TextField {
-                        id: awd
+                        id: jogUpVal
                         validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     TextField { 
-                        id: timeTilStartStartVal
+                        id: jogRightVal
                         validator: DoubleValidator {bottom:0}
                         color: (acceptableInput) ? "#17b01f" : "#b40000"
                     }
                     RoundButton{
+                        id:setJogs
                         Layout.fillWidth: true
                         text:"Set"
                         radius:4
@@ -137,6 +139,7 @@ Item {
                     anchors.fill:parent
                     color:"black"
                     Text{
+                        id:debugOut
                         height:parent.height
                         width:parent.width
                         wrapMode: Text.WordWrap
@@ -150,9 +153,6 @@ Item {
                 }            
             }
         }
-        // DataVisColumn{deviceIdx: root.deviceIdx}
-        // ControlColumn{deviceIdx: root.deviceIdx}
-        // ExperimentSetupColumn{deviceIdx: root.deviceIdx}
     }
 }
 

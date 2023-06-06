@@ -59,13 +59,13 @@ Item {
                     Layout.alignment:Qt.AlignHCenter
                     spacing:20
                     ComboBox{
-                        Layout.alignment:Qt.AlignHCenter
                         id:defectCode
+                        Layout.alignment:Qt.AlignHCenter
                         model: ["Defect Code 0", "Defect Code 1", "Defect Code 2"]
                     }
                     RoundButton
                     {
-                        id:logDefectButton
+                        id:logDefect
                         Layout.alignment:Qt.AlignHCenter
                         Layout.preferredHeight:40
                         Layout.preferredWidth:70
@@ -93,8 +93,8 @@ Item {
                             Layout.fillWidth:true
                         }
                         RoundButton{
-                            Layout.alignment:Qt.AlignHCenter
                             id:parsePresetMoveFile
+                            Layout.alignment:Qt.AlignHCenter
                             text:"Parse File"
                             Layout.preferredHeight:25
                             radius:4
@@ -107,23 +107,30 @@ Item {
                     ColumnLayout{
                         width:parent.width
                         TextField{
+                            id:currentIdx
                             Layout.alignment:Qt.AlignHCenter
                             Layout.preferredWidth:parent.width/2
                             width:parent.width/2
                             horizontalAlignment: TextField.AlignHCenter
-                            id:idx
                         }
                         RowLayout{
                             Layout.alignment:Qt.AlignHCenter
                             Layout.fillWidth:true
-                            RoundButton{text:String.fromCodePoint(0x21e6)
-                            radius:4}
                             RoundButton{
+                                id:goPrevIdx
+                                text:String.fromCodePoint(0x21e6)
+                                radius:4
+                            }
+                            RoundButton{
+                                id:goCurrentIdx
                                 text:"Go "+String.fromCodePoint(0x21b5)
                                 radius:4
                             }
-                            RoundButton{text:String.fromCodePoint(0x21e8)
-                            radius:4}
+                            RoundButton{
+                                id:goNextIdx
+                                text:String.fromCodePoint(0x21e8)
+                                radius:4
+                            }
                         }
                     }
                 }
