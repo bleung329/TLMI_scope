@@ -6,7 +6,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtCore import QObject, Slot, QPointF
 from PySide6.QtWidgets import QApplication #Has to be QApplication to use QtCharts
 from PySide6.QtQml import QQmlApplicationEngine, QmlElement
-from PySide6.QtCharts import QAbstractSeries, QValueAxis
+# from PySide6.QtCharts import QAbstractSeries, QValueAxis
 
 #The LTORs_model holds all the logic.
 # from controller import LTORs_model
@@ -14,7 +14,46 @@ from PySide6.QtCharts import QAbstractSeries, QValueAxis
 QML_IMPORT_NAME = "io.qt.bridges"
 QML_IMPORT_MAJOR_VERSION = 1
 
-# LTORs = LTORs_model()
+class stageModel():
+    def __init__(self):
+        self.x = -1
+        self.y = -1
+        self.defectFilename = ""
+        self.defectFile = None
+        self.defectWriter = None
+        ...
+    
+    def connect(self):
+        ...
+    
+    def home(self):
+        ...
+
+    def logDefect(self,filename,defectCode,comment):
+        #If the file argument isnt the same as the last one, open the file as a csv writer and store as a property.
+        if filename != self.defectFilename:
+            
+        else:
+        #Else just write the data point in.
+
+
+    def parseMoveFile(self,filename):
+        ...
+    
+    def prevMove(self):
+        ...
+    
+    def nextMove(self):
+        ...
+
+    def moveToIdx(self,idx):
+        ...
+    
+
+
+
+
+stage = stageModel()
 
 # @QmlElement
 # class DataVisColBridge(QObject):
@@ -264,14 +303,10 @@ class ExperimentSetupColBridge(QObject):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    # icon = QIcon("./innospec.png")
-    # app.setWindowIcon(icon)
     engine = QQmlApplicationEngine()
 
     engine.quit.connect(app.quit)
 
     qml_file = Path(__file__).parent / 'main.qml'
     engine.load(qml_file)
-    # LTORs.setup_devices()
     app.exec()
-    # LTORs.kill_threads()

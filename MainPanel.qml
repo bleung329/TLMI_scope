@@ -39,9 +39,24 @@ Item {
                 GroupBox{
                     title:qsTr("Filename")
                     Layout.fillWidth: true
-                    TextField{
-                        id:defectFilename
-                        width:parent.width
+                    RowLayout{
+                        Layout.alignment:Qt.AlignHCenter
+                        TextField{
+                            id:defectFilename
+                            Layout.preferredWidth:150
+                            readOnly : true
+                            text:"---"
+                        }
+                        RoundButton{
+                            id:getDefectFile
+                            Layout.preferredWidth:30
+                            Layout.preferredHeight:20
+                            radius:5
+                            text:"..."
+                            onClicked:{
+                                defectFileDialog.open()
+                            }
+                        }
                     }
                 }
                 GroupBox{
@@ -78,6 +93,7 @@ Item {
         GroupBox{
             Layout.alignment: Qt.AlignTop
             title:"Preset Moves"
+            Layout.preferredWidth:200
             // Layout.fillWidth:true
             ColumnLayout{
                 width:parent.width
@@ -87,10 +103,24 @@ Item {
                     Layout.fillWidth:true
                     ColumnLayout{
                         width:parent.width
-                        TextField{
-                            id:presetMoveFilename
-                            width:parent.width
-                            Layout.fillWidth:true
+                        RowLayout{
+                            Layout.alignment:Qt.AlignHCenter
+                            TextField{
+                                id:presetMoveFilename
+                                Layout.preferredWidth:100
+                                readOnly : true
+                                text:"---"
+                            }
+                            RoundButton{
+                                id:getPresetMoveFile
+                                Layout.preferredWidth:30
+                                Layout.preferredHeight:20
+                                radius:5
+                                text:"..."
+                                onClicked:{
+                                    presetFileDialog.open()
+                                }
+                            }
                         }
                         RoundButton{
                             id:parsePresetMoveFile
@@ -136,7 +166,20 @@ Item {
                 }
             }
         }
-        
+    }
+    FileDialog{
+        id:presetFileDialog
+        title: "Please choose a preset move file"
+        onAccepted:{
+            presetMoveFilename.text = presetFileDialog.currentFile
+        }
+    }
+    FileDialog{
+        id:defectFileDialog
+        title: "Please choose a defect file"
+        onAccepted:{
+            defectFilename.text = defectFileDialog.currentFile
+        }
     }
 }
 

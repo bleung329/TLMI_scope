@@ -21,16 +21,10 @@ Item {
                     GridLayout
                     {
                         columns:2
-                        rows:2
+                        rows:1
                         flow:GridLayout.TopToBottom
                         Text{text:"COM Port"}
-                        Text{text:"Baud"}
-                        TextField{
-                            id:comPort
-                        }
-                        TextField{
-                            id:baudRate
-                        }
+                        TextField{id:comPort}
                     }
                     RoundButton
                     {

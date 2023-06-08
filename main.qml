@@ -96,7 +96,6 @@ ApplicationWindow {
         
         StackLayout {
             currentIndex: tabBar.currentIndex
-            // y: tabBar.y + tabBar.height + 50;
             SetupPanel{}
             MainPanel{}
         }
