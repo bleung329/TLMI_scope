@@ -4,9 +4,16 @@ import QtQuick.Window //2.1
 import QtQuick.Controls
 import QtQuick.Dialogs
 
+import io.qt.bridges 1.0
+
 Item {
     id: root
     property int passed_height: 600
+
+    StageBridge{
+        id:stageBridge
+    }
+
     RowLayout{
         // columnSpacing: 20
         anchors.fill: parent
@@ -86,6 +93,9 @@ Item {
                         Layout.preferredWidth:70
                         text: qsTr("Log")
                         radius: 5
+                        onClicked:{
+                            stageBridge.logDefect(defectFilename.text,defectComments.text,defectCode.currentText)
+                        }
                     }
                 }
             }
@@ -128,6 +138,9 @@ Item {
                             text:"Parse File"
                             Layout.preferredHeight:25
                             radius:4
+                            onClicked:{
+                                currentIdx.validator.top = stageBridge.parseMoveFile(presetMoveFilename.text)
+                            }
                         }
                     }
                 }
@@ -142,24 +155,51 @@ Item {
                             Layout.preferredWidth:parent.width/2
                             width:parent.width/2
                             horizontalAlignment: TextField.AlignHCenter
+                            text:"0"
+                            validator: IntValidator {
+                                bottom: 0
+                                top: 0    
+                            }
                         }
                         RowLayout{
                             Layout.alignment:Qt.AlignHCenter
                             Layout.fillWidth:true
+                            
                             RoundButton{
                                 id:goPrevIdx
                                 text:String.fromCodePoint(0x21e6)
                                 radius:4
+                                onClicked:{
+                                    //Decrement move index
+                                    if (parseInt(currentIdx.text) > 0)
+                                    {
+                                        currentIdx.text = parseInt(currentIdx.text)-1
+                                        stageBridge.moveToIdx(parseInt(currentIdx.text))
+                                    }
+                                }
                             }
+                            
                             RoundButton{
                                 id:goCurrentIdx
                                 text:"Go "+String.fromCodePoint(0x21b5)
                                 radius:4
+                                onClicked:{
+                                    //Go to the move index of whatever is currently in the input box
+                                    stageBridge.moveToIdx(parseInt(currentIdx.text))
+                                }
                             }
+
                             RoundButton{
                                 id:goNextIdx
                                 text:String.fromCodePoint(0x21e8)
                                 radius:4
+                                onClicked:{
+                                    if (parseInt(currentIdx.text) < currentIdx.validator.top)
+                                    {
+                                        currentIdx.text = parseInt(currentIdx.text)+1
+                                        stageBridge.moveToIdx(parseInt(currentIdx.text))
+                                    }
+                                }
                             }
                         }
                     }

@@ -3,8 +3,15 @@ import QtQuick.Layouts //1.11
 import QtQuick.Window //2.1
 import QtQuick.Controls
 
+import io.qt.bridges 1.0
+
 Item {
     id: root
+
+    StageBridge{
+        id:stageBridge
+    }
+
     RowLayout{
         spacing: 20
         anchors.fill: parent
@@ -34,7 +41,9 @@ Item {
                         Layout.preferredHeight:30
                         // Layout.preferredWidth:100
                         text: qsTr("Connect")
-                        
+                        onClicked: {
+                            stageBridge.connect(comPort.text)
+                        }
                         radius: 4
                     }
                 }
@@ -50,6 +59,9 @@ Item {
                     width:parent.width
                     text: qsTr("Home")
                     radius: 4
+                    onClicked: {
+                        stageBridge.home()
+                    }
                 }
             }
         }

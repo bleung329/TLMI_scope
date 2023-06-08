@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Window 
 import QtCharts
 
+import io.qt.bridges 1.0
+
 ApplicationWindow {   
     id:root 
     visible: true
@@ -11,6 +13,10 @@ ApplicationWindow {
     height: 400
     title: "TLMI Corp Scope Controller"
     flags: Qt.Window
+    
+    StageBridge{
+        id:stageBridge
+    }
     
     //Tab bar object to change between devices
     ColumnLayout
