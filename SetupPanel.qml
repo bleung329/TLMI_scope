@@ -23,15 +23,18 @@ Item {
 
             GroupBox{
                 title:"Serial Setup"
+                Layout.fillWidth:true
                 ColumnLayout{
                     spacing:10
-                    GridLayout
+                    width:parent.width
+                    RowLayout
                     {
-                        columns:2
-                        rows:1
-                        flow:GridLayout.TopToBottom
-                        Text{text:"COM Port"}
-                        TextField{id:comPort}
+                        Text{text:"COM Port"; Layout.fillWidth:true}
+                        TextField{
+                            id:comPort
+                            text:"COM13"
+                            Layout.preferredWidth:130
+                        }
                     }
                     RoundButton
                     {
@@ -39,7 +42,6 @@ Item {
                         Layout.alignment: Qt.AlignCenter
                         Layout.fillWidth:true
                         Layout.preferredHeight:30
-                        // Layout.preferredWidth:100
                         text: qsTr("Connect")
                         onClicked: {
                             stageBridge.connect(comPort.text)
@@ -130,33 +132,15 @@ Item {
                         id:setJogs
                         Layout.fillWidth: true
                         text:"Set"
+                        enabled:{
+                            jogUpVal.acceptableInput && 
+                            jogLeftVal.acceptableInput && 
+                            jogRightVal.acceptableInput && 
+                            jogDownVal.acceptableInput
+                        }
                         radius:4
                     }
                 }
-            }
-        }
-        ColumnLayout{
-            Layout.alignment: Qt.AlignTop
-            GroupBox{
-                title:"Debug Output"
-                Layout.preferredWidth:300
-                Layout.preferredHeight:300
-                Rectangle{
-                    anchors.fill:parent
-                    color:"black"
-                    Text{
-                        id:debugOut
-                        height:parent.height
-                        width:parent.width
-                        wrapMode: Text.WordWrap
-                        verticalAlignment: Text.AlignBottom
-                        color:"yellow"
-                        text:
-                            ">Example debug message \n" +
-                            ">Another example debug message \n"+
-                            ">The quick brown fox jumps over the lazy dog. ";
-                    }   
-                }            
             }
         }
     }

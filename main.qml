@@ -9,7 +9,7 @@ import io.qt.bridges 1.0
 ApplicationWindow {   
     id:root 
     visible: true
-    width: 750 
+    width: 680 
     height: 400
     title: "TLMI Corp Scope Controller"
     flags: Qt.Window
@@ -38,9 +38,23 @@ ApplicationWindow {
                     Text{text:"Status:"}
                     Text{text:"X:"}
                     Text{text:"Y:"}
-                    Text{text:"---"; Layout.alignment: Qt.AlignHCenter}
-                    Text{text:"---"; Layout.alignment: Qt.AlignHCenter}
-                    Text{text:"---"; Layout.alignment: Qt.AlignHCenter}
+                    Text{id:statusText;text:"---"; Layout.alignment: Qt.AlignHCenter}
+                    Text{id:xText;text:"---"; Layout.alignment: Qt.AlignHCenter}
+                    Text{id:yText;text:"---"; Layout.alignment: Qt.AlignHCenter}
+                    Timer{
+                        id:statusCheckTimer
+                        interval: 50 //Update every 100 ms
+                        running: false
+                        repeat: true
+                        onTriggered: {
+                            statusText.text = stageBridge.getStatus()
+                            xText.text = stageBridge.getX()
+                            yText.text = stageBridge.getY()
+                        }
+                    }
+                    Component.onCompleted: {
+                        statusCheckTimer.running = true
+                    }
                 }
             }
 

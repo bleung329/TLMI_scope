@@ -140,6 +140,7 @@ Item {
                             radius:4
                             onClicked:{
                                 currentIdx.validator.top = stageBridge.parseMoveFile(presetMoveFilename.text)
+                                currentIdx.text = '1'
                             }
                         }
                     }
@@ -155,10 +156,10 @@ Item {
                             Layout.preferredWidth:parent.width/2
                             width:parent.width/2
                             horizontalAlignment: TextField.AlignHCenter
-                            text:"0"
+                            text:"1"
                             validator: IntValidator {
-                                bottom: 0
-                                top: 0    
+                                bottom: 1
+                                top: 1
                             }
                         }
                         RowLayout{
@@ -169,9 +170,12 @@ Item {
                                 id:goPrevIdx
                                 text:String.fromCodePoint(0x21e6)
                                 radius:4
+                                enabled:{
+                                    currentIdx.acceptableInput
+                                }
                                 onClicked:{
                                     //Decrement move index
-                                    if (parseInt(currentIdx.text) > 0)
+                                    if (parseInt(currentIdx.text) > currentIdx.validator.bottom)
                                     {
                                         currentIdx.text = parseInt(currentIdx.text)-1
                                         stageBridge.moveToIdx(parseInt(currentIdx.text))
@@ -183,6 +187,9 @@ Item {
                                 id:goCurrentIdx
                                 text:"Go "+String.fromCodePoint(0x21b5)
                                 radius:4
+                                enabled:{
+                                    currentIdx.acceptableInput
+                                }
                                 onClicked:{
                                     //Go to the move index of whatever is currently in the input box
                                     stageBridge.moveToIdx(parseInt(currentIdx.text))
@@ -193,6 +200,9 @@ Item {
                                 id:goNextIdx
                                 text:String.fromCodePoint(0x21e8)
                                 radius:4
+                                enabled:{
+                                    currentIdx.acceptableInput
+                                }
                                 onClicked:{
                                     if (parseInt(currentIdx.text) < currentIdx.validator.top)
                                     {
