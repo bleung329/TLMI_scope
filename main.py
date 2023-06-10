@@ -46,7 +46,7 @@ class stageModel():
     
     def _move(self,x,y):
         #TODO: Will this actually work?
-        self.status = "Moving"
+        # self.status = "Moving"
         #Send move command to x axis
         self.stageXAxis.move_absolute(position=x + 152.5,
                                   unit=Units.LENGTH_MILLIMETRES,
@@ -55,24 +55,40 @@ class stageModel():
         self.stageYAxis.move_absolute(position=y + 152.5,
                                   unit=Units.LENGTH_MILLIMETRES,
                                   wait_until_idle=True)
-        self.status = "Idle"
+        # self.status = "Idle"
 
     def connect(self,com):
         #Open connection to the device chain
         connection = Connection.open_serial_port(com)
+
         #Renumber devices
         connection.renumber_devices()
         #Identify all the devices on the chain.
         connection.detect_devices()
-        #Set up all the devices.
-        self.joystickDevice = connection.get_device(1)
+
+        #Set up stage
         self.stageXAxis = connection.get_device(2).get_axis(1)
         self.stageYAxis = connection.get_device(2).get_axis(2)
         
-    def setJoystickButton(self,buttonIdx,mm):
-        [1,2,3,4]
+        # self.stageXAxis = connection.get_device(1).get_axis(1)
+        # self.stageYAxis = connection.get_device(2).get_axis(1)
+        #Set up joystick
+        self.joystickDevice = connection.get_device(1)
+        #Set joystick axis 1 to device 2 axis 1
+        self.joystickDevice.generic_command("joystick 1 target 2 1")
+        #Set joystick axis 2 to device 2 axis 2
+        self.joystickDevice.generic_command("joystick 2 target 2 2")
+
         
+    def setJoystickMove(self,buttonIdx,mm):
+        #If 1 or 4, left or right
+        #If 2 or 3, down or up
         ...
+        # self.joystickDevice.generic_command("key {i}".format)
+    
+    def getJoystickMove(self,buttonIdx):
+        #Ask joystick for current command attached to current button.
+        resp = self.joystickDevice.generic_command("key {i} info".format(i=buttonIdx))
         
     def home(self):
         #Home both axes if they're available.
@@ -83,7 +99,7 @@ class stageModel():
             self._move(0,0)
             self.x = 0.0
             self.y = 0.0
-            self.status = "Idle"
+            self.status = "Active"
 
     def logDefect(self,filename,defectCode,comment):
         #If the file argument is different from the last one, open the file as a csv writer and store as a property.
@@ -101,8 +117,8 @@ class stageModel():
 
     def updatePos(self):
         if self.stageXAxis != None:
-            self.x = self.stageXAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - 152.5
-            self.y = self.stageYAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - 152.5
+            self.x = round(self.stageXAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - 152.5,3)
+            self.y = round(self.stageYAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - 152.5,3)
 
     def parseMoveFile(self,filename):
         self.movePoints = []
@@ -164,6 +180,14 @@ class StageBridge(QObject):
     @Slot(result=str)
     def getY(self):
         return str(stage.y)
+    
+    @Slot(int,result=str)
+    def getJoystickMove(self,idx):
+        return str(stage.getJoystickMove(idx))
+    
+    @Slot(int,str)
+    def setJoystickMove(self,idx,mm):
+        stage.setJoystickMove(idx,float(mm))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

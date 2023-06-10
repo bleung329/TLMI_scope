@@ -36,8 +36,8 @@ ApplicationWindow {
                     rows: 3
                     flow: GridLayout.TopToBottom
                     Text{text:"Status:"}
-                    Text{text:"X:"}
-                    Text{text:"Y:"}
+                    Text{text:"X (mm):"}
+                    Text{text:"Y (mm):"}
                     Text{id:statusText;text:"---"; Layout.alignment: Qt.AlignHCenter}
                     Text{id:xText;text:"---"; Layout.alignment: Qt.AlignHCenter}
                     Text{id:yText;text:"---"; Layout.alignment: Qt.AlignHCenter}
