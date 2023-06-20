@@ -14,13 +14,14 @@ Item {
         id:stageBridge
     }
 
-    RowLayout{
-        // columnSpacing: 20
+    GridLayout{
+        columnSpacing: 20
         anchors.fill: parent
-        // columns: 3
-        // rows:1
+        columns: 3
+        rows:1
         width: parent.width
         height: root.passed_height
+        flow: GridLayout.LeftToRight
         GroupBox{
             title: qsTr("Image Feed")
             Layout.alignment: Qt.AlignTop
@@ -214,6 +215,35 @@ Item {
                         }
                     }
                 }
+            }
+        }
+        GroupBox{
+            title:"Jog"
+            Layout.alignment:Qt.AlignHCenter
+            GridLayout{
+                // id:grood
+                rows:3
+                columns:3
+                flow: GridLayout.LeftToRight
+                anchors.fill:parent
+                Item{}
+                RoundButton{
+                    text: "U"
+                }
+                Item{}
+                RoundButton{
+                    text: "L"
+                }
+                Item{}
+                RoundButton{
+                    text: "R"
+                }
+                Item{}
+                RoundButton{
+                    text: "D"
+                }
+                Item{}
+
             }
         }
     }

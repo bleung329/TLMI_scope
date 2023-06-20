@@ -32,7 +32,7 @@ Item {
                         Text{text:"COM Port"; Layout.fillWidth:true}
                         TextField{
                             id:comPort
-                            text:"COM13"
+                            text:"COM8"
                             Layout.preferredWidth:130
                         }
                     }
