@@ -84,7 +84,12 @@ Item {
                     ComboBox{
                         id:defectCode
                         Layout.alignment:Qt.AlignHCenter
-                        model: ["Defect Code 0", "Defect Code 1", "Defect Code 2"]
+                        model: ListView{
+                            id:comboElements
+                        }
+                        Component.onCompleted{
+                            comboElements.append()
+                        }
                     }
                     RoundButton
                     {

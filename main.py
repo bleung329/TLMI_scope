@@ -9,7 +9,7 @@ from pathlib import Path
 from zaber_motion.ascii import Connection
 from zaber_motion import Units
 
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject, Slot, QAbstractListModel
 from PySide6.QtWidgets import QApplication #Has to be QApplication to use QtCharts
 from PySide6.QtQml import QQmlApplicationEngine, QmlElement
 
@@ -27,13 +27,13 @@ class positionPollingThread(threading.Thread):
             self.stage.updatePos()
 
 class stageModel():
-
     def __init__(self):
         self.x = -1
         self.y = -1
         self.defectFilename = ""
         self.defectFile = None
         self.defectWriter = None
+        self.defectCodes = []
         self.status = "None"
         self.movePoints = []
         self.stageXAxis = None
