@@ -1,6 +1,6 @@
-import QtQuick //2.15
-import QtQuick.Layouts //1.11
-import QtQuick.Window //2.1
+import QtQuick 
+import QtQuick.Layouts 
+import QtQuick.Window 
 import QtQuick.Controls
 
 import io.qt.bridges 1.0
@@ -67,82 +67,7 @@ Item {
                 }
             }
         }
-        ColumnLayout{
-            id: jogColumn
-            Layout.alignment: Qt.AlignTop
-            GroupBox {
-                title: "Joystick Jog Buttons"
-                // Layout.fillWidth: true
-                // Layout.minimumWidth: grood.Layout.minimumWidth + 30
-                GridLayout{
-                    // id:grood
-                    rows:6
-                    columns:2
-                    flow: GridLayout.TopToBottom
-                    anchors.fill:parent
-                    Text {
-                        text: "Button"
-                    }
-                    Text{
-                        // id: belowTempStartEn
-                        text: "1 (L)"
-                    }
-                    Text{
-                        text: "2 (D)"
-                    }
-                    Text{
-                        // id: belowTempStartEn
-                        text: "3 (U)"
-                    }
-                    Text{
-                        // id: belowTempStartEn
-                        text: "4 (R)"
-                    }
-                    RoundButton{
-                        id:getJogs
-                        Layout.fillWidth: true
-                        text:"Get"
-                        radius:4
-                    }
-                    Text {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: "mm"
-                    }
-                    TextField {
-                        id: jogLeftVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    TextField {
-                        id: jogDownVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    TextField {
-                        id: jogUpVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    TextField { 
-                        id: jogRightVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    RoundButton{
-                        id:setJogs
-                        Layout.fillWidth: true
-                        text:"Set"
-                        enabled:{
-                            jogUpVal.acceptableInput && 
-                            jogLeftVal.acceptableInput && 
-                            jogRightVal.acceptableInput && 
-                            jogDownVal.acceptableInput
-                        }
-                        radius:4
-                    }
-                }
-            }
-        }
+        
     }
 }
 

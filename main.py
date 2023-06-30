@@ -3,13 +3,14 @@ import sys
 import csv
 import threading
 import time
+import configparser
 
 from pathlib import Path
 
 from zaber_motion.ascii import Connection
 from zaber_motion import Units
 
-from PySide6.QtCore import QObject, Slot, QAbstractListModel
+from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QApplication #Has to be QApplication to use QtCharts
 from PySide6.QtQml import QQmlApplicationEngine, QmlElement
 
@@ -33,7 +34,13 @@ class stageModel():
         self.defectFilename = ""
         self.defectFile = None
         self.defectWriter = None
-        self.defectCodes = []
+        
+        #Open the config file and get all the defect codes.
+        self.configReader = configparser.ConfigParser()
+        self.configReader.read("stageConfig.cfg")
+        temp = self.configReader["DEFECT_CODES"]["defectCodes"]
+        self.defectCodes = temp.split(',')
+
         self.status = "None"
         self.movePoints = []
         self.stageXAxis = None
@@ -45,8 +52,6 @@ class stageModel():
         self.pollThread.start()
     
     def _move(self,x,y):
-        #TODO: Will this actually work?
-        # self.status = "Moving"
         #Send move command to x axis
         self.stageXAxis.move_absolute(position=x + 152.5,
                                   unit=Units.LENGTH_MILLIMETRES,
@@ -55,7 +60,6 @@ class stageModel():
         self.stageYAxis.move_absolute(position=y + 152.5,
                                   unit=Units.LENGTH_MILLIMETRES,
                                   wait_until_idle=True)
-        # self.status = "Idle"
 
     def connect(self,com):
         #Open connection to the device chain
@@ -63,6 +67,7 @@ class stageModel():
 
         #Renumber devices
         connection.renumber_devices()
+
         #Identify all the devices on the chain.
         connection.detect_devices()
 
@@ -74,8 +79,10 @@ class stageModel():
         # self.stageYAxis = connection.get_device(2).get_axis(1)
         #Set up joystick
         self.joystickDevice = connection.get_device(1)
+        
         #Set joystick axis 1 to device 2 axis 1
         self.joystickDevice.generic_command("joystick 1 target 2 1")
+        
         #Set joystick axis 2 to device 2 axis 2
         self.joystickDevice.generic_command("joystick 2 target 2 2")
 
@@ -127,11 +134,7 @@ class stageModel():
             for row in reader:
                 self.movePoints.append([float(row[0]),float(row[1])])
         return len(self.movePoints)
-
-    def moveToIdx(self,idx):
-        if len(self.movePoints) > 0:
-            self._move(self.movePoints[idx][0],self.movePoints[idx][1])
-    
+        
     def __del__(self):
         self.runThreadsFlag.clear()
         if self.stageXAxis != None:
@@ -167,7 +170,8 @@ class StageBridge(QObject):
 
     @Slot(int)
     def moveToIdx(self,idx):
-        stage.moveToIdx(idx)
+        if len(stage.movePoints) > 0:
+            stage._move(stage.movePoints[idx][0],stage.movePoints[idx][1])
     
     @Slot(result=str)
     def getStatus(self):
@@ -185,6 +189,37 @@ class StageBridge(QObject):
     def getJoystickMove(self,idx):
         return str(stage.getJoystickMove(idx))
     
+    @Slot(result=int)
+    def getNumDefectCodes(self):
+        return len(stage.defectCodes)
+
+    @Slot(int,result=str)
+    def getDefectCode(self,idx):
+        return stage.defectCodes[idx]
+    
+    @Slot(str,str)
+    def jog(self,direction,distance):
+        print(direction,distance)
+        if direction == 'L':
+            stage._move(stage.x-float(distance),stage.y)
+        if direction == 'R':
+            stage._move(stage.x+float(distance),stage.y)
+        if direction == 'U':
+            stage._move(stage.x,stage.y+float(distance))
+        if direction == 'D':
+            stage._move(stage.x,stage.y-float(distance))
+
+    @Slot(str,result=str)
+    def getDefaultJog(self,direction):
+        if direction == 'L':
+            return stage.configReader["DEFAULT_JOG_VALUES"]['left']
+        if direction == 'R':
+            return stage.configReader["DEFAULT_JOG_VALUES"]['right']
+        if direction == 'U':
+            return stage.configReader["DEFAULT_JOG_VALUES"]['up']
+        if direction == 'D':
+            return stage.configReader["DEFAULT_JOG_VALUES"]['down']
+        
     @Slot(int,str)
     def setJoystickMove(self,idx,mm):
         stage.setJoystickMove(idx,float(mm))
