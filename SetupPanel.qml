@@ -20,10 +20,11 @@ Item {
             id: connSetupColumn
             spacing:10
             Layout.alignment: Qt.AlignTop
-
+            
             GroupBox{
                 title:"Serial Setup"
-                Layout.fillWidth:true
+                // Layout.fillWidth:true
+                Layout.preferredWidth: 250
                 ColumnLayout{
                     spacing:10
                     width:parent.width
@@ -52,7 +53,8 @@ Item {
             }
             GroupBox
             {
-                Layout.fillWidth:true
+                Layout.preferredWidth: 250
+                // Layout.fillWidth:true
                 title:"Home Stage"
                 RoundButton
                 {

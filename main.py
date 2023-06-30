@@ -41,6 +41,9 @@ class stageModel():
         temp = self.configReader["DEFECT_CODES"]["defectCodes"]
         self.defectCodes = temp.split(',')
 
+        self.xCenter = float(self.configReader["STAGE_CENTER_VALUES"]["xCenter"])
+        self.yCenter = float(self.configReader["STAGE_CENTER_VALUES"]["yCenter"])
+
         self.status = "None"
         self.movePoints = []
         self.stageXAxis = None
@@ -53,11 +56,11 @@ class stageModel():
     
     def _move(self,x,y):
         #Send move command to x axis
-        self.stageXAxis.move_absolute(position=x + 152.5,
+        self.stageXAxis.move_absolute(position=x + self.xCenter,
                                   unit=Units.LENGTH_MILLIMETRES,
                                   wait_until_idle=False)
         #Send move command to y axis and wait to complete
-        self.stageYAxis.move_absolute(position=y + 152.5,
+        self.stageYAxis.move_absolute(position=y + self.yCenter,
                                   unit=Units.LENGTH_MILLIMETRES,
                                   wait_until_idle=True)
 
@@ -124,8 +127,8 @@ class stageModel():
 
     def updatePos(self):
         if self.stageXAxis != None:
-            self.x = round(self.stageXAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - 152.5,3)
-            self.y = round(self.stageYAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - 152.5,3)
+            self.x = round(self.stageXAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - self.xCenter,3)
+            self.y = round(self.stageYAxis.get_position(unit=Units.LENGTH_MILLIMETRES) - self.yCenter,3)
 
     def parseMoveFile(self,filename):
         self.movePoints = []
