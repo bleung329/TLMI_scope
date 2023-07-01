@@ -120,10 +120,12 @@ class stageModel():
             self.defectFile = open(filename,'w',newline="\n")
             self.defectWriter = csv.writer(self.defectFile,delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
             self.defectWriter.writerow([self.x,self.y,defectCode,comment])
+            self.defectFile.flush()
         else:
             #Else just write the data point in normally
             if self.defectWriter != None:
                 self.defectWriter.writerow([self.x,self.y,defectCode,comment])
+                self.defectFile.flush()
 
     def updatePos(self):
         if self.stageXAxis != None:
@@ -174,7 +176,7 @@ class StageBridge(QObject):
     @Slot(int)
     def moveToIdx(self,idx):
         if len(stage.movePoints) > 0:
-            stage._move(stage.movePoints[idx][0],stage.movePoints[idx][1])
+            stage._move(stage.movePoints[idx-1][0],stage.movePoints[idx-1][1])
     
     @Slot(result=str)
     def getStatus(self):
