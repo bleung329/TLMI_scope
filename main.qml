@@ -10,7 +10,7 @@ ApplicationWindow {
     id:root 
     visible: true
     width: 680 
-    height: 550
+    height: 450
     title: "TLMI Corp Scope Controller"
     flags: Qt.Window
     

@@ -22,20 +22,112 @@ Item {
         width: parent.width
         height: root.passed_height
         flow: GridLayout.LeftToRight
-        GroupBox{
-            title: qsTr("Image Feed")
-            Layout.alignment: Qt.AlignTop
-            Layout.preferredWidth:200
-            // Layout.fillWidth : true
-            ColumnLayout{
-                width:parent.width
-                Rectangle{
-                    Layout.preferredHeight:200
-                    Layout.preferredWidth: parent.width
-                    color:"dimgray"
+        
+        ColumnLayout{
+            Layout.alignment: Qt.AlignHCenter
+            GroupBox{
+                title:"Jog"
+                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter 
+                GridLayout{
+                    rows:3
+                    columns:3
+                    flow: GridLayout.LeftToRight
+                    anchors.fill:parent
+                    Item{}
+                    RoundButton{
+                        id: jogUp
+                        text: "U"
+                        onClicked:{
+                            stageBridge.jog("U",jogUpVal.text)
+                        }
+                    }
+                    Item{}
+                    RoundButton{
+                        id: jogLeft
+                        text: "L"
+                        onClicked:{
+                            stageBridge.jog("L",jogLeftVal.text)
+                        }
+                    }
+                    Item{}
+                    RoundButton{
+                        id: jogRight
+                        text: "R"
+                        onClicked:{
+                            stageBridge.jog("R",jogRightVal.text)
+                        }
+                    }
+                    Item{}
+                    RoundButton{
+                        id: jogDown
+                        text: "D"
+                        onClicked:{
+                            stageBridge.jog("D",jogDownVal.text)
+                        }
+                    }
+                    Item{}
+
+                }
+            }
+            GroupBox {
+                title: "Jog Settings"
+
+                GridLayout{
+                    rows:5
+                    columns:2
+                    flow: GridLayout.TopToBottom
+                    anchors.fill:parent
+                    Text {
+                        text: "Button"
+                    }
+                    Text{
+                        text: "1 (L)"
+                    }
+                    Text{
+                        text: "2 (D)"
+                    }
+                    Text{
+                        text: "3 (U)"
+                    }
+                    Text{
+                        text: "4 (R)"
+                    }
+
+                    Text {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: "mm"
+                    }
+                    TextField {
+                        id: jogLeftVal
+                        validator: DoubleValidator {bottom:0}
+                        color: (acceptableInput) ? "#17b01f" : "#b40000"
+                    }
+                    TextField {
+                        id: jogDownVal
+                        validator: DoubleValidator {bottom:0}
+                        color: (acceptableInput) ? "#17b01f" : "#b40000"
+                    }
+                    TextField {
+                        id: jogUpVal
+                        validator: DoubleValidator {bottom:0}
+                        color: (acceptableInput) ? "#17b01f" : "#b40000"
+                    }
+                    TextField { 
+                        id: jogRightVal
+                        validator: DoubleValidator {bottom:0}
+                        color: (acceptableInput) ? "#17b01f" : "#b40000"
+                    }
+
+                    Component.onCompleted:{
+                        jogUpVal.text = stageBridge.getDefaultJog('U')
+                        jogDownVal.text = stageBridge.getDefaultJog('D')
+                        jogLeftVal.text = stageBridge.getDefaultJog('L')
+                        jogRightVal.text = stageBridge.getDefaultJog('R')
+                    }
                 }
             }
         }
+
         GroupBox{
             title: qsTr("Defect Logging")
             Layout.alignment: Qt.AlignTop
@@ -223,129 +315,6 @@ Item {
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-        GroupBox{
-            title:"Jog"
-            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter 
-            GridLayout{
-                // id:grood
-                rows:3
-                columns:3
-                flow: GridLayout.LeftToRight
-                anchors.fill:parent
-                Item{}
-                RoundButton{
-                    text: "U"
-                    onClicked:{
-                        stageBridge.jog("U",jogUpVal.text)
-                    }
-                }
-                Item{}
-                RoundButton{
-                    text: "L"
-                    onClicked:{
-                        stageBridge.jog("L",jogLeftVal.text)
-                    }
-                }
-                Item{}
-                RoundButton{
-                    text: "R"
-                    onClicked:{
-                        stageBridge.jog("R",jogRightVal.text)
-                    }
-                }
-                Item{}
-                RoundButton{
-                    text: "D"
-                    onClicked:{
-                        stageBridge.jog("D",jogDownVal.text)
-                    }
-                }
-                Item{}
-
-            }
-        }
-        ColumnLayout{
-            id: jogColumn
-            Layout.alignment: Qt.AlignHCenter
-            GroupBox {
-                title: "Joystick Jog Settings"
-                // Layout.fillWidth: true
-                // Layout.minimumWidth: grood.Layout.minimumWidth + 30
-                GridLayout{
-                    // id:grood
-                    rows:6
-                    columns:2
-                    flow: GridLayout.TopToBottom
-                    anchors.fill:parent
-                    Text {
-                        text: "Button"
-                    }
-                    Text{
-                        // id: belowTempStartEn
-                        text: "1 (L)"
-                    }
-                    Text{
-                        text: "2 (D)"
-                    }
-                    Text{
-                        // id: belowTempStartEn
-                        text: "3 (U)"
-                    }
-                    Text{
-                        // id: belowTempStartEn
-                        text: "4 (R)"
-                    }
-                    RoundButton{
-                        id:getJogs
-                        Layout.fillWidth: true
-                        text:"Get"
-                        radius:4
-                    }
-                    Text {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: "mm"
-                    }
-                    TextField {
-                        id: jogLeftVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    TextField {
-                        id: jogDownVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    TextField {
-                        id: jogUpVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    TextField { 
-                        id: jogRightVal
-                        validator: DoubleValidator {bottom:0}
-                        color: (acceptableInput) ? "#17b01f" : "#b40000"
-                    }
-                    RoundButton{
-                        id:setJogs
-                        Layout.fillWidth: true
-                        text:"Set"
-                        enabled:{
-                            jogUpVal.acceptableInput && 
-                            jogLeftVal.acceptableInput && 
-                            jogRightVal.acceptableInput && 
-                            jogDownVal.acceptableInput
-                        }
-                        radius:4
-                    }
-                    Component.onCompleted:{
-                        jogUpVal.text = stageBridge.getDefaultJog('U')
-                        jogDownVal.text = stageBridge.getDefaultJog('D')
-                        jogLeftVal.text = stageBridge.getDefaultJog('L')
-                        jogRightVal.text = stageBridge.getDefaultJog('R')
                     }
                 }
             }

@@ -89,17 +89,6 @@ class stageModel():
         #Set joystick axis 2 to device 2 axis 2
         self.joystickDevice.generic_command("joystick 2 target 2 2")
 
-        
-    def setJoystickMove(self,buttonIdx,mm):
-        #If 1 or 4, left or right
-        #If 2 or 3, down or up
-        ...
-        # self.joystickDevice.generic_command("key {i}".format)
-    
-    def getJoystickMove(self,buttonIdx):
-        #Ask joystick for current command attached to current button.
-        resp = self.joystickDevice.generic_command("key {i} info".format(i=buttonIdx))
-        
     def home(self):
         #Home both axes if they're available.
         if self.stageXAxis != None:
@@ -190,10 +179,6 @@ class StageBridge(QObject):
     def getY(self):
         return str(stage.y)
     
-    @Slot(int,result=str)
-    def getJoystickMove(self,idx):
-        return str(stage.getJoystickMove(idx))
-    
     @Slot(result=int)
     def getNumDefectCodes(self):
         return len(stage.defectCodes)
@@ -225,10 +210,6 @@ class StageBridge(QObject):
         if direction == 'D':
             return stage.configReader["DEFAULT_JOG_VALUES"]['down']
         
-    @Slot(int,str)
-    def setJoystickMove(self,idx,mm):
-        stage.setJoystickMove(idx,float(mm))
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
