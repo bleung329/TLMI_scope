@@ -10,7 +10,6 @@ import io.qt.bridges 1.0
 Item {
 
     id: root
-    property int passed_height: 600
 
     StageBridge{
         id:stageBridge
@@ -18,30 +17,30 @@ Item {
     
     Item{
         id:keypressHandler
-        focus: tabBar.currentIndex === 1
+        focus: tabBar.currentIndex === 1 
 
         Keys.onPressed: (event)=> {
             if (!event.isAutoRepeat){
                 switch(event.key){
                     case Qt.Key_Left:
                         // console.log("move left")
-                        stageBridge.jog("L",jogLeftVal.text)
                         jogLeft.highlighted = true
+                        stageBridge.jog("L",jogLeftVal.text)
                         break;
                     case Qt.Key_Right:
                         // console.log("move right")
-                        stageBridge.jog("R",jogRightVal.text)
                         jogRight.highlighted = true
+                        stageBridge.jog("R",jogRightVal.text)
                         break;
                     case Qt.Key_Up:
                         // console.log("move up")    
-                        stageBridge.jog("U",jogUpVal.text)
                         jogUp.highlighted = true
+                        stageBridge.jog("U",jogUpVal.text)
                         break;
                     case Qt.Key_Down:
                         // console.log("move down")
-                        stageBridge.jog("D",jogDownVal.text)
                         jogDown.highlighted = true
+                        stageBridge.jog("D",jogDownVal.text)
                         break;
                     case Qt.Key_PageUp:
                         goNextIdx.highlighted = true
@@ -73,7 +72,6 @@ Item {
         columns: 3
         rows:1
         width: parent.width
-        height: root.passed_height
         flow: GridLayout.LeftToRight
         
         ColumnLayout{
@@ -119,8 +117,8 @@ Item {
                         }
                     }
                     Item{}
-
                 }
+                
             }
             GroupBox {
                 title: "Jog Settings"
@@ -180,78 +178,92 @@ Item {
                 }
             }
         }
-
-        GroupBox{
-            title: qsTr("Defect Logging")
-            Layout.alignment: Qt.AlignTop
-            ColumnLayout
-            {
-                id: controlColumn
-                spacing:10
-                width: parent.width
-                GroupBox{
-                    title:qsTr("Filename")
-                    Layout.fillWidth: true
+        ColumnLayout{
+            Layout.alignment: Qt.AlignHCenter
+            GroupBox{
+                title: qsTr("Defect Logging")
+                Layout.alignment: Qt.AlignTop
+                ColumnLayout
+                {
+                    id: controlColumn
+                    spacing:10
+                    width: parent.width
+                    GroupBox{
+                        title:qsTr("Filename")
+                        Layout.fillWidth: true
+                        RowLayout{
+                            Layout.alignment:Qt.AlignHCenter
+                            TextField{
+                                id:defectFilename
+                                Layout.preferredWidth:150
+                                readOnly : true
+                                text:"---"
+                            }
+                            RoundButton{
+                                id:getDefectFile
+                                Layout.preferredWidth:30
+                                Layout.preferredHeight:20
+                                radius:5
+                                text:"..."
+                                onClicked:{
+                                    defectFileDialog.open()
+                                }
+                            }
+                        }
+                    }
+                    GroupBox{
+                        title:qsTr("Comment")
+                        Layout.preferredHeight:100
+                        Layout.fillWidth:true
+                        TextField{
+                            id:defectComments
+                            height:parent.height
+                            width:parent.width
+                            wrapMode: TextField.WordWrap
+                        }
+                    }
                     RowLayout{
                         Layout.alignment:Qt.AlignHCenter
-                        TextField{
-                            id:defectFilename
-                            Layout.preferredWidth:150
-                            readOnly : true
-                            text:"---"
+                        spacing:20
+                        ComboBox{
+                            id:defectCode
+                            Layout.alignment:Qt.AlignHCenter
+                            model: ListModel{
+                                id:comboElements
+                            }
+                            Component.onCompleted:{
+                                var numCodes = stageBridge.getNumDefectCodes()
+                                for (var i = 0; i < numCodes; i++)
+                                {
+                                    comboElements.append({text: stageBridge.getDefectCode(i)})
+                                }
+                                defectCode.currentIndex = 0
+                            }
                         }
-                        RoundButton{
-                            id:getDefectFile
-                            Layout.preferredWidth:30
-                            Layout.preferredHeight:20
-                            radius:5
-                            text:"..."
+                        RoundButton
+                        {
+                            id:logDefect
+                            Layout.alignment:Qt.AlignHCenter
+                            Layout.preferredHeight:40
+                            Layout.preferredWidth:70
+                            text: qsTr("Log")
+                            radius: 5
                             onClicked:{
-                                defectFileDialog.open()
+                                stageBridge.logDefect(defectFilename.text,defectComments.text,defectCode.currentText)
                             }
                         }
                     }
                 }
-                GroupBox{
-                    title:qsTr("Comment")
-                    Layout.preferredHeight:100
-                    Layout.fillWidth:true
-                    TextField{
-                        id:defectComments
-                        height:parent.height
-                        width:parent.width
-                        wrapMode: TextField.WordWrap
-                    }
-                }
-                RowLayout{
-                    Layout.alignment:Qt.AlignHCenter
-                    spacing:20
-                    ComboBox{
-                        id:defectCode
-                        Layout.alignment:Qt.AlignHCenter
-                        model: ListModel{
-                            id:comboElements
-                        }
-                        Component.onCompleted:{
-                            var numCodes = stageBridge.getNumDefectCodes()
-                            for (var i = 0; i < numCodes; i++)
-                            {
-                                comboElements.append({text: stageBridge.getDefectCode(i)})
-                            }
-                            defectCode.currentIndex = 0
-                        }
-                    }
-                    RoundButton
+            }
+            GroupBox{
+                Layout.alignment:Qt.AlignHCenter
+                title: "KB Active"
+                Switch{
+                    id:kbfocus
+                    checked: keypressHandler.focus
+                    onClicked:
                     {
-                        id:logDefect
-                        Layout.alignment:Qt.AlignHCenter
-                        Layout.preferredHeight:40
-                        Layout.preferredWidth:70
-                        text: qsTr("Log")
-                        radius: 5
-                        onClicked:{
-                            stageBridge.logDefect(defectFilename.text,defectComments.text,defectCode.currentText)
-                        }
+                        keypressHandler.focus = true
                     }
                 }
             }
@@ -395,4 +407,5 @@ Item {
             defectFilename.text = defectFileDialog.currentFile
         }
     }
+    
 }
