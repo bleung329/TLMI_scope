@@ -6,12 +6,65 @@ import QtQuick.Dialogs
 
 import io.qt.bridges 1.0
 
+
 Item {
+
     id: root
     property int passed_height: 600
 
     StageBridge{
         id:stageBridge
+    }
+    
+    Item{
+        id:keypressHandler
+        focus: tabBar.currentIndex === 1
+
+        Keys.onPressed: (event)=> {
+            if (!event.isAutoRepeat){
+                switch(event.key){
+                    case Qt.Key_Left:
+                        // console.log("move left")
+                        stageBridge.jog("L",jogLeftVal.text)
+                        jogLeft.highlighted = true
+                        break;
+                    case Qt.Key_Right:
+                        // console.log("move right")
+                        stageBridge.jog("R",jogRightVal.text)
+                        jogRight.highlighted = true
+                        break;
+                    case Qt.Key_Up:
+                        // console.log("move up")    
+                        stageBridge.jog("U",jogUpVal.text)
+                        jogUp.highlighted = true
+                        break;
+                    case Qt.Key_Down:
+                        // console.log("move down")
+                        stageBridge.jog("D",jogDownVal.text)
+                        jogDown.highlighted = true
+                        break;
+                    case Qt.Key_PageUp:
+                        goNextIdx.highlighted = true
+                        goNextIdx.moveNextIdx();
+                        break;
+                    case Qt.Key_PageDown:
+                        goPrevIdx.highlighted = true
+                        goPrevIdx.movePrevIdx();
+                        break;
+                    default:
+                }
+            }
+            
+        }
+        Keys.onReleased:
+        {
+            jogUp.highlighted = false
+            jogLeft.highlighted = false
+            jogRight.highlighted = false
+            jogDown.highlighted = false
+            goNextIdx.highlighted = false
+            goPrevIdx.highlighted = false
+        }
     }
 
     GridLayout{
@@ -276,13 +329,17 @@ Item {
                                 enabled:{
                                     currentIdx.acceptableInput
                                 }
-                                onClicked:{
-                                    //Decrement move index
+                                function movePrevIdx() {
+                                    console.log("MovePrev")
                                     if (parseInt(currentIdx.text) > currentIdx.validator.bottom)
                                     {
                                         currentIdx.text = parseInt(currentIdx.text)-1
                                         stageBridge.moveToIdx(parseInt(currentIdx.text))
                                     }
+                                }
+                                onClicked:{
+                                    //Decrement move index
+                                    goPrevIdx.movePrevIdx()
                                 }
                             }
                             
@@ -306,12 +363,16 @@ Item {
                                 enabled:{
                                     currentIdx.acceptableInput
                                 }
-                                onClicked:{
+                                function moveNextIdx() {
+                                    console.log("MoveNext")
                                     if (parseInt(currentIdx.text) < currentIdx.validator.top)
                                     {
                                         currentIdx.text = parseInt(currentIdx.text)+1
                                         stageBridge.moveToIdx(parseInt(currentIdx.text))
                                     }
+                                }
+                                onClicked:{
+                                    goNextIdx.moveNextIdx()
                                 }
                             }
                         }
